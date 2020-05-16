@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Super Agregador de Notícias</title>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="shortcut icon" href="favicon.ico" type="img/favicon.ico">
+        <meta charset="UTF-8">
+    </head>
+
+    <body> 
+        <header>
+            <ul>
+                <il>Home</il>
+                <il>Agregador</il>
+                <il>Adicionar itens</il>
+            </ul>
+        </header>
+
+        <div class="container">
+            <h2>Adicione um feed</h2>
+            <form action="/AdicionarSite" method="POST">
+              <div class="form-group">
+                <label for="rss">Email:</label>
+                <input type="url" class="form-control" id="rss" placeholder="Digite o rss do feed" name="url">
+              </div>
+              <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="name" class="form-control" id="nome" placeholder="Enter password" name="nome" th:value="${valorNome}">
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" name="remember"> Remember me</label>
+              </div>
+              <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+          </div>
+
+    
+        <h1 th:text="${'Seja bem-vindo ao Super Agregador de Notícias, ' + nome + '!!'}"></h1>
+    </body>
+</html>
