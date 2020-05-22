@@ -16,7 +16,7 @@ public class ControllerDeErro  implements ErrorController {
     private HashMap<Integer, String> erros;
 
     ControllerDeErro () {
-
+        erros = new HashMap<>();
         erros.put(400, "Requisição inválida");
         erros.put(401, "Não autorizado");
         erros.put(402, "Pagamento necessário");
