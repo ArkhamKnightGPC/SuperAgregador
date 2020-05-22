@@ -9,7 +9,6 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.superagregador.view.ErrorHandler;
 
 @Controller
 public class ControllerDeErro  implements ErrorController {
