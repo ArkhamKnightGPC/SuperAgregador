@@ -1,0 +1,13 @@
+<html>
+    <head th:replace="/fragmentos/head.html"></head>
+
+        <body>
+            <nav th:replace="/fragmentos/navbar.html"></nav>
+            <div class="jumbotron">
+                <div class="container text-center">
+                  <h1 th:text="${'Erro ' + erro}">Feed RSS</h1>      
+                  <p th:text="${msgDeErro}"></p>
+                </div>
+              </div>
+        </body>
+    </html>

@@ -1,86 +1,33 @@
 html {
-    background-color: #555;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-
+    scroll-behavior: smooth;
 }
 
-header {
-    width: auto;
-    
+#adicionar {
+    opacity: 1;
+    transition: opacity .3s linear;
+    display: none;
 }
 
-body {
-    font-family: Sans-serif;
-    color: #000;
-    background-color: #fff;
-    font-size: 1em;
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0;
-    height: 100%;
+#adicionar.hide {
+    opacity: 0;
 }
 
-h1 {
-    text-align: center;
+.person {
+    border: 10px solid transparent;
+    margin-bottom: 25px;
+    width: 80%;
+    opacity: 0.8;
+  }
+
+.person:hover {
+    border-color: #f1f1f1;
+    opacity: 1;
 }
 
-.erro {
-    color: #F44;
+.footer {
+    margin-top: 1000px;
 }
 
-fieldset {
-    border: 1px solid #333;
-    color: #333;
-    margin: 10px 0 0 0;
-}
-
-label {
-    display: block;
-    margin: 10px 0 0 0;
-}
-
-input[type=text],
-textarea {
-    width: 100%;
-    border: 1px solid #333;
-    padding: 0.5em;
-    font-size: 1.2em;
-}
-
-input[type=submit] {
-    float: right;
-    clear: both;
-    background-color: #0D68C2;
-}
-
-.botao {
-    padding: 1em;
-    color: #FFF;
-    font-weight: bold;
-    border: 0;
-    border-radius: 5px;
-}
-
-table {
-    width: 100%;
-}
-
-table th {
-    background-color: #EEE;
-    font-size: 18px;
-}
-
-table td {
-    border-bottom: 1px solid #333;
-    color: #000;
-}
-
-#bloco_principal {
-    width: 600px;
-    background-color: #FFF;
-    padding: 1em;
-    margin: 0 auto 0 auto;
+.bottom-div {
+    padding-bottom: 70px;
 }

@@ -1,0 +1,16 @@
+<script>
+    $(document).ready(function() {
+    
+        var docHeight = $(window).height();
+        var footerHeight = $('#footer').height();
+        var footerTop = $('#footer').position().top + footerHeight;
+    
+        if (footerTop < docHeight)
+            $('#footer').css('margin-top', 10+ (docHeight - footerTop) + 'px');
+    });
+    </script>
+</script>
+
+<footer class="navbar center-text bg-secondary fixed-bottom" id="footer">
+    <p>Footer Text</p>
+</footer>
