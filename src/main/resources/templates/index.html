@@ -7,7 +7,7 @@
         <div class="jumbotron">
             <div class="container text-center">
               <h1>Feed RSS</h1>      
-              <p th:text ="${'Seu feed de notícias ' + nome}"></p>
+              <p>Seu feed de notícias</p>
             </div>
         </div>
 
@@ -21,8 +21,8 @@
                     </div>
                     <br>
                     <div class="col-sm-4">
-                        <label for="rss">URL:</label>
-                        <input type="url" class="form-control" id="rss" placeholder="Digite o rss do feed" name="url" th:value="${valorURL}">
+                        <label for="uri">URL:</label>
+                        <input type="url" class="form-control" id="uri" placeholder="Digite o rss do feed" name="uri" th:value="${valorURI}">
                     </div>
                     <div class="col-sm-4">
                         <label>&nbsp</label>
@@ -31,7 +31,12 @@
                 </div>
             </form>
         </div>
-        <div th:replace="fragmentos/feed.html"></div>
+        <div th:if="${existemBlogs}">
+            <div th:replace="/fragmentos/feed.html"></div>
+        </div>
+        <div class="container" th:unless="${existemBlogs}">
+            <h4 class="text-center">Parece que você ainda não adicionou nenhum feed de notícias!</h4>
+        </div>
         <footer th:replace="fragmentos/footer.html"></footer>
     </body>
 </html> 
