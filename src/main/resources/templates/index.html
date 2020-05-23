@@ -1,6 +1,5 @@
-<html>
     <head th:replace="/fragmentos/head.html"></head>
-
+    
     <body>
        <nav th:replace="/fragmentos/navbar.html"></nav>
 
@@ -37,6 +36,4 @@
         <div class="container" th:unless="${existemBlogs}">
             <h4 class="text-center">Parece que você ainda não adicionou nenhum feed de notícias!</h4>
         </div>
-        <footer th:replace="fragmentos/footer.html"></footer>
-    </body>
-</html> 
+    <footer th:replace="fragmentos/footer.html"></footer>
