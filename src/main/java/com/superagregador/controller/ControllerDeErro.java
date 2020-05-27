@@ -21,7 +21,7 @@ public class ControllerDeErro  implements ErrorController {
         erros.put(401, "Não autorizado");
         erros.put(402, "Pagamento necessário");
         erros.put(403, "Proibido");
-        erros.put(404, "Página ão encontrada");
+        erros.put(404, "Página não encontrada");
         erros.put(405, "Método não permitido");
         erros.put(406, "Não Aceitável");
         erros.put(407, "Autenticação de proxy necessária");
