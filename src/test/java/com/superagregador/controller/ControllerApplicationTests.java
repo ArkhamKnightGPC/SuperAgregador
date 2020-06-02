@@ -24,7 +24,7 @@ class ControllerApplicationTests {
 		editaBlog = EditarBlog.inicializador();
 		Blog blog = new Blog(EditarBlog.getMaxID(), "http://editoraglobo.globo.com/rss/", "Globo");
 		editaBlog.adicionarBlog(blog);
-		blogs = editaBlog.getMap();
+		blogs = EditarBlog.getMap();
 		for(Blog blog2: blogs.values()){
 			assertEquals("http://editoraglobo.globo.com/rss/", blog2.getUri());
 			assertEquals("Globo", blog2.getNome());
@@ -35,7 +35,7 @@ class ControllerApplicationTests {
 	void removerBlogTest(){
 		editaBlog = EditarBlog.inicializador();
 		Blog blog = new Blog(EditarBlog.getMaxID(), "http://editoraglobo.globo.com/rss/", "Globo");
-		blogs = editaBlog.getMap();
+		blogs = EditarBlog.getMap();
 		editaBlog.adicionarBlog(blog);
 		editaBlog.removerBlog(EditarBlog.getMaxID()-1);
 		for(Integer integer: blogs.keySet()){

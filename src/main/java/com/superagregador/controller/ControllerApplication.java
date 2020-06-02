@@ -14,10 +14,12 @@ import com.superagregador.models.EditarBlog;
 @SpringBootApplication (scanBasePackages = { "com.superagregador"})
 @Controller
 public class ControllerApplication {
+	
 	private static EditarBlog blogs;
 	private static String nomePadrao = "";
 	private static String uriPadrao = "";
 	private static boolean existemBlogs;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(ControllerApplication.class, args);
 		blogs = EditarBlog.inicializador();
@@ -25,11 +27,11 @@ public class ControllerApplication {
 
 	@GetMapping("/")
 	public String home(Model model) {
-		if (blogs.getMap().isEmpty()) {
+		if (EditarBlog.getMap().isEmpty()) {
 			existemBlogs = false;
 		} else existemBlogs = true;
 
-		model.addAttribute("blogs", blogs.getMap());
+		model.addAttribute("blogs", EditarBlog.getMap());
 		model.addAttribute("existemBlogs", existemBlogs);
 		model.addAttribute("valorNome", nomePadrao);
 		model.addAttribute("valorURI", uriPadrao);

@@ -24,7 +24,7 @@ public class EditarBlog {
         return id;
     }
 
-    public HashMap<Integer, Blog> getMap() {
+    public static HashMap<Integer, Blog> getMap() {
         return blogs;
     }
 
