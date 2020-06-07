@@ -1,9 +1,13 @@
 package com.superagregador.controller;
+
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,28 +15,26 @@ import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import com.superagregador.models.Blog;
-import com.superagregador.models.EditarBlog;
 
 @Controller
 public class ControllerListarNoticias{
 		
 		@GetMapping("/lista")
-		public String listarNoticias(Model model) throws Exception{
-			
-			HashMap<Integer, Blog> listaDeBlogs = EditarBlog.getMap();
+		public String listarNoticias(Model model, HttpServletRequest request) throws Exception{
 			List<String> linksDeBlogs = new ArrayList<String>();//eh aqui que vamos colocar os links
-			
-			for(Map.Entry<Integer, Blog> entry : listaDeBlogs.entrySet()) {//vamos iterar por todos os blogs adicionados para pegar os links dos feeds
-				Blog blog = entry.getValue();
-				String url = blog.uri;
-				XmlReader reader = new XmlReader(new URL(url));
+			Cookie[] cookies = request.getCookies();
+
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals( "uri" )){
+					String url = cookie.getValue();
+					XmlReader reader = new XmlReader(new URL(url));
 				SyndFeed feed = new SyndFeedInput().build(reader);
 				for (SyndEntry syndEntry : feed.getEntries()) {//vamos ver o conteudo do feed fornecido
 					String linkDeBlog = syndEntry.getLink();
 					linksDeBlogs.add(linkDeBlog);
 				}
-				model.addAttribute("linksDeBlogs", linksDeBlogs);//agora podemos manipular esses links com o thymeleaf
+				model.addAttribute("linksDeBlogs", linksDeBlogs);
+				}
 			}
 			return "lista";
 		}

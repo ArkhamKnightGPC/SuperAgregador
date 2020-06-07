@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
+import javax.servlet.http.HttpServletResponse;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import com.superagregador.models.Blog;
 import com.superagregador.models.EditarBlog;
@@ -26,15 +30,28 @@ public class ControllerApplication {
 	}
 
 	@GetMapping("/")
-	public String home(Model model) {
-		if (EditarBlog.getMap().isEmpty()) {
+	public String home(Model model, HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies == null) {
 			existemBlogs = false;
-		} else existemBlogs = true;
-
-		model.addAttribute("blogs", EditarBlog.getMap());
-		model.addAttribute("existemBlogs", existemBlogs);
-		model.addAttribute("valorNome", nomePadrao);
-		model.addAttribute("valorURI", uriPadrao);
+		} else{
+			existemBlogs = true;
+			model.addAttribute("blogs", EditarBlog.getMap());
+			model.addAttribute("existemBlogs", existemBlogs);
+			
+			for (Cookie cookie : cookies) {
+				Blog blog = new Blog (EditarBlog.getMaxID(), uriPadrao, nomePadrao);
+				if (cookie.getName().equals( "nome" )){
+					model.addAttribute("valorNome", cookie.getValue());
+					blog.setNome(cookie.getValue());
+				}
+				if(cookie.getName().equals( "uri")){
+					model.addAttribute("valorURI", cookie.getValue());
+					blog.setNome(cookie.getValue());
+				}
+				blogs.adicionarBlog(blog);
+			}
+		}
 		return "index";
 	}
 
@@ -46,10 +63,16 @@ public class ControllerApplication {
 	@PostMapping("/AdicionarSite")
 	public String adicionarSite(@RequestParam(value = "nome", required = true, defaultValue = "") String nome,
 								@RequestParam(value = "uri", required = true, defaultValue = "") String uri,
-								Model model) {
+								Model model, HttpServletRequest request, HttpServletResponse response) {
 							
 		if (!nome.equals("") && !uri.equals("")) {
 			blogs.adicionarBlog(new Blog (EditarBlog.getMaxID(), uri, nome));
+			Cookie nomeCookie = new Cookie("nome", nome);
+			Cookie uriCookie = new Cookie("uri", uri);
+			uriCookie.setMaxAge(60*60*24);
+			nomeCookie.setMaxAge(60*60*24);
+			response.addCookie(nomeCookie);
+			response.addCookie(uriCookie);
 			nomePadrao = "";
 			uriPadrao = "";
 		} else {
