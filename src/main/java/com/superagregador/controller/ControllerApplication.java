@@ -32,26 +32,35 @@ public class ControllerApplication {
 	@GetMapping("/")
 	public String home(Model model, HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
-		if (cookies == null) {
+		if (EditarBlog.getMap().isEmpty()) {
 			existemBlogs = false;
+			if(cookies != null){
+				for (int i =0; i < cookies.length/2; i++) {
+					existemBlogs = true;
+					Blog blog = new Blog (EditarBlog.getMaxID(), uriPadrao, nomePadrao);
+					if (cookies[i].getName().equals( "nome" )){
+						model.addAttribute("valorNome", cookies[i].getValue());
+						blog.setNome(cookies[i].getValue());
+					}
+					if(i < cookies.length-1){
+						if(cookies[i+1].getName().equals( "uri")){
+							model.addAttribute("valorURI", cookies[i+1].getValue());
+							blog.setUri(cookies[i+1].getValue());
+						}
+					}
+					model.addAttribute("blogs", EditarBlog.getMap());
+					model.addAttribute("existemBlogs", existemBlogs);
+					blogs.adicionarBlog(blog);
+				}
+			}
 		} else{
 			existemBlogs = true;
-			model.addAttribute("blogs", EditarBlog.getMap());
-			model.addAttribute("existemBlogs", existemBlogs);
-			
-			for (Cookie cookie : cookies) {
-				Blog blog = new Blog (EditarBlog.getMaxID(), uriPadrao, nomePadrao);
-				if (cookie.getName().equals( "nome" )){
-					model.addAttribute("valorNome", cookie.getValue());
-					blog.setNome(cookie.getValue());
-				}
-				if(cookie.getName().equals( "uri")){
-					model.addAttribute("valorURI", cookie.getValue());
-					blog.setNome(cookie.getValue());
-				}
-				blogs.adicionarBlog(blog);
-			}
 		}
+
+		model.addAttribute("blogs", EditarBlog.getMap());
+		model.addAttribute("existemBlogs", existemBlogs);
+		model.addAttribute("valorNome", nomePadrao);
+		model.addAttribute("valorURI", uriPadrao);
 		return "index";
 	}
 
@@ -86,6 +95,7 @@ public class ControllerApplication {
 	@PostMapping("/RemoverSite")
 	public String removerSite(@RequestParam(value= "id", required = true) int id) {
 		blogs.removerBlog((Integer) id);
+		
 		return "redirect:/";
 	}
 
