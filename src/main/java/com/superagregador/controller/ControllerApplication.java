@@ -93,9 +93,15 @@ public class ControllerApplication {
 	}
 
 	@PostMapping("/RemoverSite")
-	public String removerSite(@RequestParam(value= "id", required = true) int id) {
+	public String removerSite(@RequestParam(value= "id", required = true) int id, HttpServletResponse response) {
+		Cookie nomeCookie = new Cookie("nome", EditarBlog.getMap().get(id).getNome());
+		nomeCookie.setMaxAge(0);
+
+		Cookie uriCookie = new Cookie("uri", EditarBlog.getMap().get(id).getUri());
+		uriCookie.setMaxAge(0);
+		response.addCookie(nomeCookie);
+		response.addCookie(uriCookie);
 		blogs.removerBlog((Integer) id);
-		
 		return "redirect:/";
 	}
 
