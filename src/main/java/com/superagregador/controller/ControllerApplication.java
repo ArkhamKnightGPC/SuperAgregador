@@ -99,6 +99,7 @@ public class ControllerApplication {
 
 		Cookie uriCookie = new Cookie("uri", EditarBlog.getMap().get(id).getUri());
 		uriCookie.setMaxAge(0);
+
 		response.addCookie(nomeCookie);
 		response.addCookie(uriCookie);
 		blogs.removerBlog((Integer) id);
