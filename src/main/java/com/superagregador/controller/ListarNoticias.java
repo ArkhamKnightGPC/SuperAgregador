@@ -17,7 +17,7 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
 @Controller
-public class ControllerListarNoticias{
+public class ListarNoticias{
 		
 		@GetMapping("/lista")
 		public String listarNoticias(Model model, HttpServletRequest request) throws Exception{
@@ -25,7 +25,7 @@ public class ControllerListarNoticias{
 			Cookie[] cookies = request.getCookies();
 
 			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals( "uri" )){
+				if (cookie.getName().equals("uri")){
 					String url = cookie.getValue();
 					XmlReader reader = new XmlReader(new URL(url));
 				SyndFeed feed = new SyndFeedInput().build(reader);

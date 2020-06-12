@@ -78,8 +78,8 @@ public class ControllerApplication {
 			blogs.adicionarBlog(new Blog (EditarBlog.getMaxID(), uri, nome));
 			Cookie nomeCookie = new Cookie("nome", nome);
 			Cookie uriCookie = new Cookie("uri", uri);
-			uriCookie.setMaxAge(60*60*24);
-			nomeCookie.setMaxAge(60*60*24);
+			uriCookie.setMaxAge(999999999);
+			nomeCookie.setMaxAge(999999999);
 			response.addCookie(nomeCookie);
 			response.addCookie(uriCookie);
 			nomePadrao = "";
@@ -92,7 +92,7 @@ public class ControllerApplication {
 		return "redirect:/";
 	}
 
-	@PostMapping("/RemoverSite")
+	@PostMapping("/RemoverFeed")
 	public String removerSite(@RequestParam(value= "id", required = true) int id, HttpServletResponse response) {
 		Cookie nomeCookie = new Cookie("nome", EditarBlog.getMap().get(id).getNome());
 		nomeCookie.setMaxAge(0);
