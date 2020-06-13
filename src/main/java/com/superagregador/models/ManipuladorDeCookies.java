@@ -9,25 +9,19 @@ import java.net.URLEncoder;
 public class ManipuladorDeCookies {
     private static EditarBlog blogs = EditarBlog.inicializador();
 
-    public static void salvarCookies(String nome, String uri, Integer id, HttpServletResponse response) {
-        try{
-            Cookie nomeCookie = new Cookie("nome", URLEncoder.encode(nome, "UTF-8"));
-            
-            Cookie uriCookie = new Cookie( "uri", URLEncoder.encode(uri, "UTF-8"));
-            
-            Cookie idCookie = new Cookie ( "id", id.toString());
+    public static void salvarCookies(String nome, String uri, Integer id, HttpServletResponse response) throws Exception {
+        
+        Cookie nomeCookie = new Cookie("nome", URLEncoder.encode(nome, "UTF-8"));
+        Cookie uriCookie = new Cookie( "uri", URLEncoder.encode(uri, "UTF-8"));
+        Cookie idCookie = new Cookie ( "id", id.toString());
 
-            uriCookie.setMaxAge(999999999);
-            nomeCookie.setMaxAge(999999999);
-            idCookie.setMaxAge(999999999);
+        uriCookie.setMaxAge(999999999);
+        nomeCookie.setMaxAge(999999999);
+        idCookie.setMaxAge(999999999);
             
-            response.addCookie(nomeCookie);
-            response.addCookie(uriCookie);
-            response.addCookie(idCookie);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        response.addCookie(nomeCookie);
+        response.addCookie(uriCookie);
+        response.addCookie(idCookie);
         
     }
 

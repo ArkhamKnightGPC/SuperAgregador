@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -30,13 +29,10 @@ public class ControllerApplication {
 	private static String nomePadrao = "";
 	private static String uriPadrao = "";
 	private static boolean existemBlogs;
-	private static int maxUserID;
-	private static File maxUserIDFile;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ControllerApplication.class, args);
 		blogs = EditarBlog.inicializador();
-		maxUserIDFile = new File("/maxUserID.txt");
 
 	}
 
@@ -88,7 +84,11 @@ public class ControllerApplication {
 			blogs.adicionarBlog(new Blog (id, uri, nome));
 			nomePadrao = "";
 			uriPadrao = "";
-			ManipuladorDeCookies.salvarCookies(nome, uri, id,response);
+			try {
+				ManipuladorDeCookies.salvarCookies(nome, uri, id,response);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 		} else {
 			nomePadrao = nome;
 			uriPadrao = uri;
@@ -99,17 +99,19 @@ public class ControllerApplication {
 
 	@PostMapping("/RemoverFeed")
 	public String removerSite(@RequestParam(value= "id", required = true) int id, HttpServletResponse response) {
-		Cookie nomeCookie = new Cookie("nome", EditarBlog.getMap().get(id).getNome());
+		Cookie nomeCookie = new Cookie("nome", "");
 		nomeCookie.setMaxAge(0);
 
-		Cookie uriCookie = new Cookie("uri", EditarBlog.getMap().get(id).getUri());
+		Cookie uriCookie = new Cookie("uri", "");
 		uriCookie.setMaxAge(0);
 		
-		Cookie idCookie = new Cookie("id", Integer.toString(id));
+		Cookie idCookie = new Cookie("id", Integer.toString(-1));
+		idCookie.setMaxAge(0);
 
 		response.addCookie(nomeCookie);
 		response.addCookie(uriCookie);
 		response.addCookie(idCookie);
+
 		blogs.removerBlog(Integer.valueOf(id));
 		return "redirect:/";
 	}
