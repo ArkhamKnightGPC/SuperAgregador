@@ -21,7 +21,7 @@ public class Blog {
         return nome;
     }
 
-    public int ID() {
+    public int getID() {
         return ID;
     }
 

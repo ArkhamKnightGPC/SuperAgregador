@@ -1,4 +1,9 @@
-<div class="container center-text">    
+<div class="container text-center" id="listar-fontes">
+    <button class="btn btn-outline-primary btn-block" onclick="toggleListarFontesCadastradas()">Listar fontes</button>
+</div>
+
+</div>
+<div class="container center-text hide collapse" id="fontes">    
     <table class="table table-bordered" id="feed">
         <tr>
             <th width="20%">Nome</th>
@@ -17,4 +22,8 @@
             </td>
         </tr>
     </table>
+</div>
+
+<div class="container text-center hide collapse" id="deslistar-fontes">
+    <button class="btn btn-outline-primary btn-block" onclick="toggleListarFontesCadastradas()">Esconder fontes</button>
 </div>

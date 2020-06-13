@@ -1,5 +1,7 @@
-/home/eduardo/Super Agregador/src/main/java/com/superagregador/controller/ControllerListarNoticias.java
+/home/eduardo/Super Agregador/src/main/java/com/superagregador/models/XmlParser.java
 /home/eduardo/Super Agregador/src/main/java/com/superagregador/controller/ControllerDeErro.java
 /home/eduardo/Super Agregador/src/main/java/com/superagregador/models/Blog.java
 /home/eduardo/Super Agregador/src/main/java/com/superagregador/controller/ControllerApplication.java
+/home/eduardo/Super Agregador/src/main/java/com/superagregador/models/Noticia.java
+/home/eduardo/Super Agregador/src/main/java/com/superagregador/models/ManipuladorDeCookies.java
 /home/eduardo/Super Agregador/src/main/java/com/superagregador/models/EditarBlog.java

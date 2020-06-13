@@ -12,21 +12,40 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+
 import com.superagregador.models.Blog;
 import com.superagregador.models.EditarBlog;
+import com.superagregador.models.ManipuladorDeCookies;
+import com.superagregador.models.XmlParser;
+import com.superagregador.models.Noticia;
 
-@SpringBootApplication (scanBasePackages = { "com.superagregador"})
+@SpringBootApplication(scanBasePackages = { "com.superagregador" })
 @Controller
 public class ControllerApplication {
-	
+
 	private static EditarBlog blogs;
 	private static String nomePadrao = "";
 	private static String uriPadrao = "";
 	private static boolean existemBlogs;
-	
+	private static int maxUserID;
+	private static File maxUserIDFile;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ControllerApplication.class, args);
 		blogs = EditarBlog.inicializador();
+		maxUserIDFile = new File("/maxUserID.txt");
+
+	}
+
+	private ArrayList<Noticia> gerarNoticias() throws Exception {
+		XmlParser xml = null;
+		for (Integer id : EditarBlog.getMap().keySet()) {
+			xml = new XmlParser(new URI(EditarBlog.getMap().get(id).getUri()));
+		}
+		return xml.getNoticias();
 	}
 
 	@GetMapping("/")
@@ -35,28 +54,18 @@ public class ControllerApplication {
 		if (EditarBlog.getMap().isEmpty()) {
 			existemBlogs = false;
 			if(cookies != null){
-				for (int i =0; i < cookies.length/2; i++) {
-					existemBlogs = true;
-					Blog blog = new Blog (EditarBlog.getMaxID(), uriPadrao, nomePadrao);
-					if (cookies[i].getName().equals( "nome" )){
-						model.addAttribute("valorNome", cookies[i].getValue());
-						blog.setNome(cookies[i].getValue());
-					}
-					if(i < cookies.length-1){
-						if(cookies[i+1].getName().equals( "uri")){
-							model.addAttribute("valorURI", cookies[i+1].getValue());
-							blog.setUri(cookies[i+1].getValue());
-						}
-					}
-					model.addAttribute("blogs", EditarBlog.getMap());
-					model.addAttribute("existemBlogs", existemBlogs);
-					blogs.adicionarBlog(blog);
-				}
+				existemBlogs = true;
+				ManipuladorDeCookies.lerCookies(cookies);
 			}
 		} else{
 			existemBlogs = true;
 		}
-
+		try {
+			model.addAttribute("noticias", gerarNoticias());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		model.addAttribute("blogs", EditarBlog.getMap());
 		model.addAttribute("existemBlogs", existemBlogs);
 		model.addAttribute("valorNome", nomePadrao);
@@ -72,18 +81,14 @@ public class ControllerApplication {
 	@PostMapping("/AdicionarSite")
 	public String adicionarSite(@RequestParam(value = "nome", required = true, defaultValue = "") String nome,
 								@RequestParam(value = "uri", required = true, defaultValue = "") String uri,
-								Model model, HttpServletRequest request, HttpServletResponse response) {
+								Model model, HttpServletResponse response) {
 							
 		if (!nome.equals("") && !uri.equals("")) {
-			blogs.adicionarBlog(new Blog (EditarBlog.getMaxID(), uri, nome));
-			Cookie nomeCookie = new Cookie("nome", nome);
-			Cookie uriCookie = new Cookie("uri", uri);
-			uriCookie.setMaxAge(999999999);
-			nomeCookie.setMaxAge(999999999);
-			response.addCookie(nomeCookie);
-			response.addCookie(uriCookie);
+			Integer id = EditarBlog.getMaxID();
+			blogs.adicionarBlog(new Blog (id, uri, nome));
 			nomePadrao = "";
 			uriPadrao = "";
+			ManipuladorDeCookies.salvarCookies(nome, uri, id,response);
 		} else {
 			nomePadrao = nome;
 			uriPadrao = uri;
@@ -99,10 +104,13 @@ public class ControllerApplication {
 
 		Cookie uriCookie = new Cookie("uri", EditarBlog.getMap().get(id).getUri());
 		uriCookie.setMaxAge(0);
+		
+		Cookie idCookie = new Cookie("id", Integer.toString(id));
 
 		response.addCookie(nomeCookie);
 		response.addCookie(uriCookie);
-		blogs.removerBlog((Integer) id);
+		response.addCookie(idCookie);
+		blogs.removerBlog(Integer.valueOf(id));
 		return "redirect:/";
 	}
 

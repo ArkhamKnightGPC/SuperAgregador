@@ -10,29 +10,10 @@
             </div>
         </div>
 
-        <div class="container hide collpase" id="adicionar">
-            <h2>Adicione um Novo Feed</h2>
-            <form action="/AdicionarSite" method="POST">
-                <div class="form-group row">
-                    <div class="col-sm-4 gap">
-                        <label for="nome">Nome:</label>
-                        <input type="name" class="form-control -" id="nome" placeholder="Digite o nome que você quer que tenha. Exemplo: Valor econômico" name="nome" th:value="${valorNome}">
-                    </div>
-                    <br>
-                    <div class="col-sm-4">
-                        <label for="uri">URL:</label>
-                        <input type="url" class="form-control" id="uri" placeholder="Digite o rss do feed" name="uri" th:value="${valorURI}">
-                    </div>
-                    <div class="col-sm-4">
-                        <label>&nbsp</label>
-                        <input type="submit" class="form-control btn btn-outline-primary my-2 my-sm-0 abaixo" placeholer="Adicionar" value="Enviar">
-                    </div>
-                </div>
-            </form>
-        </div>
+        <div th:replace="/fragmentos/adicionar.html"></div>
         <div th:if="${existemBlogs}">
-            <d1 th:replace="/fragmentos/feed.html"></d1>
-            <center><a href="lista"><button>Ver conteudo dos feeds adicionados</button></a></center>
+            <div th:replace="/fragmentos/fontes.html"></div>
+            <div th:replace="/fragmentos/noticia.html"></div>
         </div>
         <div class="container" th:unless="${existemBlogs}">
             <h4 class="text-center">Parece que você ainda não adicionou nenhum feed de notícias!</h4>

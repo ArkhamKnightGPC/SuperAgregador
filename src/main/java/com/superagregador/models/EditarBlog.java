@@ -33,6 +33,10 @@ public class EditarBlog {
         ++id;
     }
 
+    public void adicionarBlog (Blog blog, Integer id) {
+        blogs.put(id, blog);
+    }
+
     public void removerBlog (Integer blogID) {
         blogs.remove(blogID);
     } 

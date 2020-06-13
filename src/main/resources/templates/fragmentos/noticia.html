@@ -1,0 +1,13 @@
+<div th:each="noticia : ${noticias}" class="card border-dark mx-auto noticia">
+    <div class="card-header text-center manchete">
+        <a class="manchete" th:href="${noticia.getLink()}" th:text="${noticia.getTitulo()}">
+        </a>
+    </div>
+    <a th:href="${noticia.getLink()}">
+        <img class="card-img-top"  th:src="${noticia.getImagem()}">
+    </a>
+    <div class="class-body">
+        <p class="data" th:text="${noticia.getData()}"></p>
+        <p th:text="${noticia.getSubtitulo()}"></p>
+    </div>
+</div>

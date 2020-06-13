@@ -18,3 +18,22 @@ function toggleFormAdicionarItens() {
         document.getElementById("nav-adc").setAttribute("href", "/#");
     }
 }
+
+function toggleListarFontesCadastradas() {
+    var btnListarFontes = document.getElementById("listar-fontes");
+    var btnDeslistarFontes = document.getElementById("deslistar-fontes");
+    var divFontes = document.getElementById("fontes");
+
+    if (btnListarFontes.classList.contains("hide")) {
+        btnListarFontes.style.display = "block";
+        btnDeslistarFontes.style.display = "none";
+        divFontes.style.display = "none";
+        btnListarFontes.classList.remove("hide");
+    } else {
+        btnListarFontes.style.display = "none";
+        btnDeslistarFontes.style.display = "block";
+        divFontes.style.display = "block";
+        btnListarFontes.classList.add("hide");
+    }
+
+}
