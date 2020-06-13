@@ -1,4 +1,9 @@
-<div class="container center-text">    
+<div class="container text-center" id="listar-fontes">
+    <button class="btn btn-outline-primary btn-block" onclick="toggleListarFontesCadastradas()">Listar fontes</button>
+</div>
+
+</div>
+<div class="container center-text hide collapse" id="fontes">    
     <table class="table table-bordered" id="feed">
         <tr>
             <th width="20%">Nome</th>
@@ -10,11 +15,15 @@
             <td class="align-middle" th:text="${lista.value.getNome()}"></td>
             <td class="align-middle"><a th:href="${lista.value.getUri()}" th:text="${lista.value.getUri()}"></a></td>
             <td class="align-middle">
-                <form method="POST" action="/RemoverSite">
+                <form method="POST" action="/RemoverFeed">
                     <input type="hidden" name="id" th:value=${lista.key}>
                     <input type="submit" value="Remover" class="btn btn-outline-primary btn-sm align-middle" >
                 </form>
             </td>
         </tr>
     </table>
+</div>
+
+<div class="container text-center hide collapse" id="deslistar-fontes">
+    <button class="btn btn-outline-primary btn-block" onclick="toggleListarFontesCadastradas()">Esconder fontes</button>
 </div>
