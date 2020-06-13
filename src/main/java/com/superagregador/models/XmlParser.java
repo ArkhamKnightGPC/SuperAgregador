@@ -34,6 +34,10 @@ public class XmlParser {
         return noticias;
     }
 
+    public XmlParser() {
+        noticias = new ArrayList<>();
+    }
+
     private String getDadosDoEvento(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
         String retorno = "";
         event = eventReader.nextEvent();

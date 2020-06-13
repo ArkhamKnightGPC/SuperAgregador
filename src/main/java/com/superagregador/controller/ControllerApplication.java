@@ -37,7 +37,7 @@ public class ControllerApplication {
 	}
 
 	private ArrayList<Noticia> gerarNoticias() throws Exception {
-		XmlParser xml = null;
+		XmlParser xml = new XmlParser(); //Assim evita que após exclusão noticias permaneçam
 		for (Integer id : EditarBlog.getMap().keySet()) {
 			xml = new XmlParser(new URI(EditarBlog.getMap().get(id).getUri()));
 		}

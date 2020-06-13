@@ -1,4 +1,7 @@
 com/superagregador/controller/ControllerApplication.class
+com/superagregador/models/XmlParser.class
 com/superagregador/models/EditarBlog.class
 com/superagregador/controller/ControllerDeErro.class
+com/superagregador/models/Noticia.class
+com/superagregador/models/ManipuladorDeCookies.class
 com/superagregador/models/Blog.class
