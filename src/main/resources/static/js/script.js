@@ -37,3 +37,20 @@ function toggleListarFontesCadastradas() {
     }
 
 }
+
+const searchBar = document.forms['search-name'].querySelector('input');
+searchBar.addEventListener('keyup', function(e){
+    const term = e.target.value.toLowerCase();
+    const articles = document.getElementsByClassName('card border-dark mx-auto noticia');
+    Array.from(articles).forEach(function(article){
+        const firstdiv = article.firstElementChild;
+        const title = firstdiv.firstElementChild.textContent.toLowerCase(); //pega o titulo
+        const c = article.children;
+        k = c[2].children;  //pega o elemento pai da descrição o k[1] é o segundo <p>, lugar a ser procurado
+        if(k[1].textContent.toLowerCase().indexOf(term) != -1 || title.indexOf(term) != -1){
+            article.style.display = 'block';
+        }else{
+            article.style.display = 'none';
+        }
+    })
+})

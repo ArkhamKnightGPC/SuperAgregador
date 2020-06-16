@@ -4,7 +4,13 @@
         </a>
     </div>
     <a th:href="${noticia.getLink()}">
-        <img class="card-img-top"  th:src="${noticia.getImagem()}">
+        <td th:switch="${noticia.getImagem()}">
+            <span th:case= null></span>
+            <div th:case="*">
+                <img class="card-img-top"  th:src="${noticia.getImagem()}">
+            </div>
+        </td>
+        
     </a>
     <div class="class-body">
         <p class="data" th:text="${noticia.getData()}"></p>
