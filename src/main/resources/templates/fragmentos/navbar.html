@@ -35,7 +35,12 @@
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" id = "search-name">
-            <input class="form-control mr-sm-2" type="text" placeholder="Pesquisar" aria-label="Search">
+            <input id = "searching" class="form-control mr-sm-2" type="text"  aria-label="Search" 
+            onkeypress= "return searchKeyPress(event);" 
+            placeholder="Busque aqui..." 
+            onfocus="this.placeholder = 'Insira aqui sua lista de palavras-chave'"
+            onblur="this.placeholder = 'Busque aqui...'">
         </form>
+        <button id = "botaoSearch"class="btn btn-outline-primary my-2 my-sm-0" onclick="toggleBusca()">Pesquisar</button>
     </div>
 </nav>

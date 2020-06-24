@@ -68,3 +68,34 @@ html {
     background-color: #222222;
     color: #eeeeee;
 }
+.buscarData{
+    display: flex;
+    padding: 10;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 50vw;    
+}
+#dinamicData{
+    display: flex;
+    padding: 10;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 50vw;
+    display: none;
+}
+.form-group-1{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100vw;
+}
+#searching:focus{
+    width: 500px;
+    
+}
