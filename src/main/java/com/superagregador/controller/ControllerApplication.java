@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletResponse;
@@ -13,10 +14,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import com.superagregador.models.AhoCorasick;
 import com.superagregador.models.Blog;
 import com.superagregador.models.EditarBlog;
+import com.superagregador.models.GeradorWordCloud;
 import com.superagregador.models.ManipuladorDeCookies;
 import com.superagregador.models.XmlParser;
 import com.superagregador.models.Noticia;
@@ -115,5 +119,32 @@ public class ControllerApplication {
 		blogs.removerBlog(Integer.valueOf(id));
 		return "redirect:/";
 	}
-
+	
+	@RequestMapping("/expressoes")
+	public String expressoes(Model model) throws Exception{
+		//preciso pegar textos das noticias para pesquisar as expressoes
+		String texto = "";
+		ArrayList<String> padroes = new ArrayList<>();
+		
+		for (Integer id : EditarBlog.getMap().keySet()) {
+			XmlParser xml = new XmlParser(new URI(EditarBlog.getMap().get(id).getUri()));
+			ArrayList<Noticia> noticias = xml.getNoticias();
+			for(int i=0; i<noticias.size(); i++) {
+				String titulo = noticias.get(i).getTitulo();
+				texto = texto + noticias.get(i);
+				texto = texto + noticias.get(i).getSubtitulo();
+			}
+			String[] palavrasDoTexto = texto.split(" ");
+			for(int i=0; i<palavrasDoTexto.length; i++)
+				padroes.add(palavrasDoTexto[i]);
+		}
+		AhoCorasick ahoCorasick = new AhoCorasick(texto, padroes);
+		ArrayList<String> palavrasMaisFrequentes = ahoCorasick.padroesMaisFrequentes();
+		
+		//vamos usar essas palavras para gerar word cloud
+		GeradorWordCloud geradorWordCloud = new GeradorWordCloud(palavrasMaisFrequentes);
+		geradorWordCloud.gerarWordCloud();
+		
+		return "expressoes";
+	}
 }

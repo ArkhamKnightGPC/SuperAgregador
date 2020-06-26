@@ -12,17 +12,17 @@ public class AhoCorasick {
 	private int tamanhoTrie = 0;//numero de estados ja criados no automato
 	private ArrayList<EstadoAhoCorasick> trie = new ArrayList<>();//lista de estados adicionados na trie
 	
-	AhoCorasick(String texto, ArrayList<String> padroes){
+	public AhoCorasick(String texto, ArrayList<String> padroes){
 		this.texto = texto;
 		this.padroes = padroes;
 		trie.add(new EstadoAhoCorasick(tamanhoTrie, -1, '$'));//adicionar raiz da trie como vertice inicial
 		tamanhoTrie++;
 		for(int i=0; i<padroes.size(); i++) {
-			adicionarString(padroes.get(i));
+			adicionarString(i, padroes.get(i));
 		}
 	}
-
-	private void adicionarString(String padrao) {//adiciona padrao na trie
+	
+	private void adicionarString(int idx, String padrao) {//adiciona padrao na trie
 		int estadoAtual = 0;//comecamos na raiz e vamos descendo adicionando caractere por caractere
 		for(int i=0; i<padrao.length(); i++) {
 			char atual = padrao.charAt(i);
@@ -34,6 +34,7 @@ public class AhoCorasick {
 			estadoAtual = trie.get(estadoAtual).filhos.get(atual);
 		}
 		trie.get(estadoAtual).fim = true;//marcamos vertice final
+		trie.get(estadoAtual).idPadrao = idx;
 	}
 	
 	private int getSuffixLink(int idVertice) {
@@ -54,13 +55,32 @@ public class AhoCorasick {
 		return trie.get(idVertice).transicao.get(ch);
 	}
 	
-	public boolean procurarNoTexto() {//retorna se algum padrao foi encontrado no texto ou nao
+	public ArrayList<String> padroesMaisFrequentes() {//retorna se algum padrao foi encontrado no texto ou nao
+		ArrayList<String> retorno = new ArrayList<>();
 		int estadoAtual = 0;
-		boolean achei = false;
 		for(int i=0; i<texto.length(); i++) {
 			char ch = texto.charAt(i);
 			estadoAtual = getTransicao(estadoAtual, ch);
-			if(trie.get(estadoAtual).fim)achei = true;//atingi estado no automato correspondente a fim de um padrao
+			trie.get(estadoAtual).freq++;
+		}
+		for(int i=trie.size()-1; i>=0; i--) {
+			int sufProp = getSuffixLink(i);
+			trie.get(sufProp).freq += trie.get(i).freq;
+		}
+		for(int i=0; i<trie.size(); i++) {
+			if(trie.get(i).fim == false)continue;
+			String padrao = padroes.get(trie.get(i).idPadrao);
+			if(trie.get(i).freq > 3 && padrao.length()>4)retorno.add(padrao);//se apareceu pelo menos 4 vezes tah valendo
+		}
+		return retorno;
+	}
+	public boolean procurarNoTexto() {
+		boolean achei = false;
+		int estadoAtual = 0;
+		for(int i=0; i<texto.length(); i++) {
+			char ch = texto.charAt(i);
+			estadoAtual = getTransicao(estadoAtual, ch);
+			if(trie.get(estadoAtual).fim)achei = true;
 		}
 		return achei;
 	}
