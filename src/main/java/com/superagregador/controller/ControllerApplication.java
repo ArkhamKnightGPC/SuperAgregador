@@ -130,8 +130,7 @@ public class ControllerApplication {
 			XmlParser xml = new XmlParser(new URI(EditarBlog.getMap().get(id).getUri()));
 			ArrayList<Noticia> noticias = xml.getNoticias();
 			for(int i=0; i<noticias.size(); i++) {
-				String titulo = noticias.get(i).getTitulo();
-				texto = texto + noticias.get(i);
+				texto = texto + noticias.get(i).getTitulo();
 				texto = texto + noticias.get(i).getSubtitulo();
 			}
 			String[] palavrasDoTexto = texto.split(" ");
