@@ -48,6 +48,12 @@
 			</exclusions>
 		</dependency>
 		
+		<dependency>
+    		<groupId>com.kennycason</groupId>
+    		<artifactId>kumo-core</artifactId>
+    		<version>1.27</version>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>
