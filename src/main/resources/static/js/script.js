@@ -47,6 +47,12 @@ function extract([beg, end]) {
         return str.match(matcher).map(normalise);
     }
 }
+
+function regexFromString (string) {
+    var match = /^\/(.*)\/([a-z]*)$/.exec(string)
+    return new RegExp(match[1], match[2])
+  }
+
 function toggleBusca() {
     const div = document.getElementById('searching');
     var stringComplete = div.value.toLowerCase();
@@ -72,7 +78,13 @@ function toggleBusca() {
         k = c[2].children;  //pega o elemento pai da descrição, o k[0] é o primeiro <p>, lugar a ser procurado  
         article.style.display = 'none';
         todasStrings.forEach(function(term){
-            if(k[0].textContent.toLowerCase().includes(term) || title.includes(term) ){
+            if(term.includes("/")){
+                var regexp = regexFromString(term);
+                if(regexp.test(k[0].textContent.toLowerCase()) || regexp.test(title) ){
+                    article.style.display = 'block';
+                }
+            }
+            else if(k[0].textContent.toLowerCase().includes(term) || title.includes(term) ){
                 article.style.display = 'block';
             }
         })
