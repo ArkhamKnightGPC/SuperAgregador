@@ -33,7 +33,7 @@ Requisitos extra que nós adicionamos para nos adequar às boas práticas de um 
 - [ ] Testes automatizados para garantir o bom funcionamento do programa
 - [x] Buscar seguir os principios de criação de bons códigos, como SOLID e Design Patterns.
 
-># Spring 1:
+># Sprint 1:
 _O primeiro sprint foi o pontapé inicial para o projeto, criando o design do site e o recurso de adicionar fontes de notícias._
 
 * Optamos por usar maven como gerenciador de dependências.
