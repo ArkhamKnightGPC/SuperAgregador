@@ -2,7 +2,6 @@ package com.superagregador.models;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ import com.kennycason.kumo.nlp.FrequencyAnalyzer;
 import com.kennycason.kumo.palette.ColorPalette;
 
 public class GeradorWordCloud {
-	ArrayList<String> palavras = new ArrayList<>();
-	public GeradorWordCloud(ArrayList<String> palavras) throws Exception {
+	List<String> palavras = new ArrayList<>();
+	public GeradorWordCloud(List<String> palavras) throws Exception {
 		this.palavras = palavras;
 		//vamos escrever no txt
 		FileOutputStream fos = new FileOutputStream("src/main/resources/textoWordCloud.txt");

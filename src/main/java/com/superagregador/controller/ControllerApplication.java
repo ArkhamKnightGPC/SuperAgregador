@@ -13,60 +13,107 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import com.superagregador.models.AhoCorasick;
 import com.superagregador.models.Blog;
-import com.superagregador.models.EditarBlog;
+import com.superagregador.models.Usuario;
+import com.superagregador.models.UsuarioInexistente;
 import com.superagregador.models.GeradorWordCloud;
+import com.superagregador.models.GerenciadorDeUsuario;
 import com.superagregador.models.ManipuladorDeCookies;
-import com.superagregador.models.XmlParser;
 import com.superagregador.models.Noticia;
+import com.superagregador.models.Parser;
+import com.superagregador.models.ParserCreator;
 
-@SpringBootApplication(scanBasePackages = { "com.superagregador" })
+@SpringBootApplication(scanBasePackages = { "com.superagregador.*" })
 @Controller
 public class ControllerApplication {
 
-	private static EditarBlog blogs;
+	private static GerenciadorDeUsuario gerenciadorDeUsuarios;
 	private static String nomePadrao = "";
 	private static String uriPadrao = "";
-	private static boolean existemBlogs;
+	private static Parser leitor;
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(ControllerApplication.class, args);
-		blogs = EditarBlog.inicializador();
-
+		Integer maxUId = getMaxUId();
+		gerenciadorDeUsuarios = GerenciadorDeUsuario.getInstance(maxUId);
 	}
 
-	private ArrayList<Noticia> gerarNoticias() throws Exception {
-		XmlParser xml = new XmlParser(); //Assim evita que após exclusão noticias permaneçam
-		for (Integer id : EditarBlog.getMap().keySet()) {
-			xml = new XmlParser(new URI(EditarBlog.getMap().get(id).getUri()));
+	private static Integer getMaxUId () {
+		leitor = ParserCreator.criarParser("txt");
+		try { 
+			leitor.lerArquivo("maxUId.txt");
+			return Integer.valueOf(leitor.retornarResultados().get(0)[0]);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return xml.getNoticias();
+		return 0;
+	}
+
+	private Usuario getUsuarioDaSessao(Cookie[] cookies, HttpServletResponse response) throws UsuarioInexistente {
+		Integer id;
+		ManipuladorDeCookies mc = new ManipuladorDeCookies();
+		if (cookies == null || mc.getUId(cookies) == null) {
+			id = gerenciadorDeUsuarios.adicionarNovoUsuario();
+		} else {
+			id = Integer.valueOf(mc.getUId(cookies));
+			if (gerenciadorDeUsuarios.existeUsuario(id))
+				return gerenciadorDeUsuarios.getUsuario(id);
+			id = gerenciadorDeUsuarios.adicionarUsuario(id);
+		}	
+		mc.salvarUId(id, response);
+		return gerenciadorDeUsuarios.getUsuario(id);
+		
+	}
+
+	private List<Noticia> gerarNoticias(Usuario usuario) throws Exception {
+		leitor = ParserCreator.criarParser("xml");
+		Iterator<Integer> iterator = usuario.getKeySet().iterator();
+		Blog blog;
+		List<Noticia> noticias = new ArrayList<>();
+		while (iterator.hasNext()) {
+			blog = usuario.getBlog(iterator.next());
+			leitor.lerArquivo(blog.getUri());			
+			for (String[] resultado : leitor.retornarResultados()) {
+				noticias.add(new Noticia(resultado));
+			}
+		}
+		return noticias;
 	}
 
 	@GetMapping("/")
-	public String home(Model model, HttpServletRequest request) {
+	public String home(Model model, HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
-		if (EditarBlog.getMap().isEmpty()) {
-			existemBlogs = false;
-			if(cookies != null){
-				existemBlogs = true;
-				ManipuladorDeCookies.lerCookies(cookies);
-			}
-		} else{
-			existemBlogs = true;
-		}
+		ManipuladorDeCookies mc = new ManipuladorDeCookies();
+		Map <Integer, String[]> conteudoDosCookies; 
+		boolean existemBlogs = false;
+		Usuario usuario;
+
 		try {
-			model.addAttribute("noticias", gerarNoticias());
+			usuario = getUsuarioDaSessao(cookies, response);
+			if(cookies != null){
+				conteudoDosCookies = mc.lerCookies(cookies);
+				for (Integer i : conteudoDosCookies.keySet()) {
+					String[] blog = conteudoDosCookies.get(i);
+					if (blog[2] != null && blog[1] != null && blog[0] != null) //Verifica se é válido
+						usuario.adicionarBlog(new Blog(Integer.valueOf(blog[2]), blog[1], blog[0]), i);
+				}
+			}
+
+			existemBlogs = (usuario.getListaDeBlogs().isEmpty()) ? false : true;
+			model.addAttribute("noticias", gerarNoticias(usuario));
+			model.addAttribute("blogs", usuario.getListaDeBlogs());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("blogs", EditarBlog.getMap());
 		model.addAttribute("existemBlogs", existemBlogs);
 		model.addAttribute("valorNome", nomePadrao);
 		model.addAttribute("valorURI", uriPadrao);
@@ -77,68 +124,73 @@ public class ControllerApplication {
 	public String sobre(Model model) {
 		return "sobre";
 	}
-
+	
 	@PostMapping("/AdicionarSite")
 	public String adicionarSite(@RequestParam(value = "nome", required = true, defaultValue = "") String nome,
 								@RequestParam(value = "uri", required = true, defaultValue = "") String uri,
-								Model model, HttpServletResponse response) {
-							
-		if (!nome.equals("") && !uri.equals("")) {
-			Integer id = EditarBlog.getMaxID();
-			blogs.adicionarBlog(new Blog (id, uri, nome));
-			nomePadrao = "";
-			uriPadrao = "";
-			try {
-				ManipuladorDeCookies.salvarCookies(nome, uri, id,response);
-			} catch (Exception e){
-				e.printStackTrace();
+								Model model, HttpServletRequest request, HttpServletResponse response) {
+		Usuario usuario;
+		Cookie[] cookies = request.getCookies();
+		ManipuladorDeCookies mc = new ManipuladorDeCookies();
+		try {
+			usuario = getUsuarioDaSessao(cookies, response);
+			
+			if (!nome.equals("") && !uri.equals("")) {
+				
+				Integer id = usuario.getMaxBlogId();
+				usuario.adicionarBlog(new Blog (id, uri, nome), id);
+				nomePadrao = "";
+				uriPadrao = "";
+
+				mc.salvarCookie(usuario.getBlog(id),response);
+			} else {
+				nomePadrao = nome;
+				uriPadrao = uri;
 			}
-		} else {
-			nomePadrao = nome;
-			uriPadrao = uri;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return "redirect:/";
 	}
 
 	@PostMapping("/RemoverFeed")
-	public String removerSite(@RequestParam(value= "id", required = true) int id, HttpServletResponse response) {
-		Cookie nomeCookie = new Cookie("nome", "");
-		nomeCookie.setMaxAge(0);
+	public String removerSite(@RequestParam(value= "id", required = true) int id,
+							HttpServletRequest request,
+							HttpServletResponse response) {
+		Usuario usuario;
+		Cookie[] cookies = request.getCookies();
+		ManipuladorDeCookies mc = new ManipuladorDeCookies();
+		try {
+			usuario = getUsuarioDaSessao(cookies, response);
+			mc.removerCookieDeNoticia(id, response);
+			usuario.removerBlog(id);
 
-		Cookie uriCookie = new Cookie("uri", "");
-		uriCookie.setMaxAge(0);
-		
-		Cookie idCookie = new Cookie("id", Integer.toString(-1));
-		idCookie.setMaxAge(0);
-
-		response.addCookie(nomeCookie);
-		response.addCookie(uriCookie);
-		response.addCookie(idCookie);
-
-		blogs.removerBlog(Integer.valueOf(id));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "redirect:/";
 	}
 	
 	@RequestMapping("/expressoes")
-	public String expressoes(Model model) throws Exception{
+	public String expressoes(Model model, HttpServletResponse response, HttpServletRequest request) throws Exception{
 		//preciso pegar textos das noticias para pesquisar as expressoes
 		String texto = "";
-		ArrayList<String> padroes = new ArrayList<>();
-		
-		for (Integer id : EditarBlog.getMap().keySet()) {
-			XmlParser xml = new XmlParser(new URI(EditarBlog.getMap().get(id).getUri()));
-			ArrayList<Noticia> noticias = xml.getNoticias();
-			for(int i=0; i<noticias.size(); i++) {
-				texto = texto + noticias.get(i).getTitulo();
-				texto = texto + noticias.get(i).getSubtitulo();
-			}
-			String[] palavrasDoTexto = texto.split(" ");
-			for(int i=0; i<palavrasDoTexto.length; i++)
-				padroes.add(palavrasDoTexto[i]);
+		List<String> padroes = new ArrayList<>();
+		Cookie[] cookies = request.getCookies();
+		Usuario usuario = getUsuarioDaSessao(cookies, response);
+	
+		List<Noticia> noticias = gerarNoticias(usuario);
+		for(int i=0; i<noticias.size(); i++) {
+			texto = texto + noticias.get(i).getTitulo();
+			texto = texto + noticias.get(i).getSubtitulo();
 		}
+		String[] palavrasDoTexto = texto.split(" ");
+		for(int i=0; i<palavrasDoTexto.length; i++)
+			padroes.add(palavrasDoTexto[i]);
+		
 		AhoCorasick ahoCorasick = new AhoCorasick(texto, padroes);
-		ArrayList<String> palavrasMaisFrequentes = ahoCorasick.padroesMaisFrequentes();
+		List<String> palavrasMaisFrequentes = ahoCorasick.padroesMaisFrequentes();
 		
 		//vamos usar essas palavras para gerar word cloud
 		GeradorWordCloud geradorWordCloud = new GeradorWordCloud(palavrasMaisFrequentes);

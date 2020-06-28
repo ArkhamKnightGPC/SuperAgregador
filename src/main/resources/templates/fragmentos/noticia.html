@@ -1,13 +1,13 @@
 <div th:each="noticia : ${noticias}" class="card border-dark mx-auto noticia">
     <div class="card-header text-center manchete">
-        <a class="manchete" th:href="${noticia.getLink()}" th:text="${noticia.getTitulo()}">
+        <a class="manchete" th:href="${noticia.getLink()}" th:text="${noticia.getTitulo()}" target="_blank">
         </a>
     </div>
-    <a th:href="${noticia.getLink()}">
+    <a th:href="${noticia.getLink()}" target="_blank">
         <td th:switch="${noticia.getImagem()}">
             <span th:case= null></span>
             <div th:case="*">
-                <img class="card-img-top"  th:src="${noticia.getImagem()}">
+                <img class="card-img-top" th:src="${noticia.getImagem()}">
             </div>
         </td>
         

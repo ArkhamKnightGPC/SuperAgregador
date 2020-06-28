@@ -61,9 +61,8 @@ public class ControllerDeErro  implements ErrorController {
             Integer statusCode = Integer.valueOf(status.toString());
             model.addAttribute("erro", statusCode.intValue());
             model.addAttribute("msgDeErro", erros.get(statusCode.intValue()));
-
         }
-
+        
         return "error";
     }
 

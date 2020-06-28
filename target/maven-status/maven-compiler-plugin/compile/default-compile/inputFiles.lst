@@ -1,9 +1,17 @@
-C:\Users\phdin\Documents\EngCompPoli\3 semestre\MAC0321\ProjetoAgregador\super-agregador-de-not-cias\src\main\java\com\superagregador\models\EditarBlog.java
-C:\Users\phdin\Documents\EngCompPoli\3 semestre\MAC0321\ProjetoAgregador\super-agregador-de-not-cias\src\main\java\com\superagregador\models\XmlParser.java
-C:\Users\phdin\Documents\EngCompPoli\3 semestre\MAC0321\ProjetoAgregador\super-agregador-de-not-cias\src\main\java\com\superagregador\models\Noticia.java
-C:\Users\phdin\Documents\EngCompPoli\3 semestre\MAC0321\ProjetoAgregador\super-agregador-de-not-cias\src\main\java\com\superagregador\models\Blog.java
-C:\Users\phdin\Documents\EngCompPoli\3 semestre\MAC0321\ProjetoAgregador\super-agregador-de-not-cias\src\main\java\com\superagregador\models\EstadoAhoCorasick.java
-C:\Users\phdin\Documents\EngCompPoli\3 semestre\MAC0321\ProjetoAgregador\super-agregador-de-not-cias\src\main\java\com\superagregador\controller\ControllerApplication.java
-C:\Users\phdin\Documents\EngCompPoli\3 semestre\MAC0321\ProjetoAgregador\super-agregador-de-not-cias\src\main\java\com\superagregador\controller\ControllerDeErro.java
-C:\Users\phdin\Documents\EngCompPoli\3 semestre\MAC0321\ProjetoAgregador\super-agregador-de-not-cias\src\main\java\com\superagregador\models\ManipuladorDeCookies.java
-C:\Users\phdin\Documents\EngCompPoli\3 semestre\MAC0321\ProjetoAgregador\super-agregador-de-not-cias\src\main\java\com\superagregador\models\AhoCorasick.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/controller/ControllerDeErro.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/XmlParser.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/ParserCreator.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/EstadoAhoCorasick.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/UsuarioJaExistente.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/JsonParser.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/controller/ControllerApplication.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/ManipuladorDeCookies.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/TxtParser.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/GeradorWordCloud.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/GerenciadorDeUsuario.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/Blog.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/Parser.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/UsuarioInexistente.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/Noticia.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/Usuario.java
+/home/eduardo/Super Agregador de Noticias/src/main/java/com/superagregador/models/AhoCorasick.java

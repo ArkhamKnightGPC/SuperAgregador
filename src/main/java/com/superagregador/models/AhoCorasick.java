@@ -1,6 +1,7 @@
 package com.superagregador.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AhoCorasick {
 	/* Vamos implementar o automato de Aho-Corasick para buscar em tempo linear os padroes no texto
@@ -8,11 +9,11 @@ public class AhoCorasick {
 	 * de maneira online conforme for necessario 
 	 */
 	private String texto;
-	private ArrayList<String> padroes = new ArrayList<>();
+	private List<String> padroes = new ArrayList<>();
 	private int tamanhoTrie = 0;//numero de estados ja criados no automato
-	private ArrayList<EstadoAhoCorasick> trie = new ArrayList<>();//lista de estados adicionados na trie
+	private List<EstadoAhoCorasick> trie = new ArrayList<>();//lista de estados adicionados na trie
 	
-	public AhoCorasick(String texto, ArrayList<String> padroes){
+	public AhoCorasick(String texto, List<String> padroes){
 		this.texto = texto;
 		this.padroes = padroes;
 		trie.add(new EstadoAhoCorasick(tamanhoTrie, -1, '$'));//adicionar raiz da trie como vertice inicial
@@ -55,8 +56,8 @@ public class AhoCorasick {
 		return trie.get(idVertice).transicao.get(ch);
 	}
 	
-	public ArrayList<String> padroesMaisFrequentes() {//retorna se algum padrao foi encontrado no texto ou nao
-		ArrayList<String> retorno = new ArrayList<>();
+	public List<String> padroesMaisFrequentes() {//retorna se algum padrao foi encontrado no texto ou nao
+		List<String> retorno = new ArrayList<>();
 		int estadoAtual = 0;
 		for(int i=0; i<texto.length(); i++) {
 			char ch = texto.charAt(i);
