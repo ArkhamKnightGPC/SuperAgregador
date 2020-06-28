@@ -15,10 +15,10 @@
         <div class="container buscarData" th:unless="${!existemBlogs}">
             <button class="btn btn-outline-primary" onclick="toggleBuscarPorData()">Filtrar por Data</button>
         </div>
-        <div>
-        	<br><br>
-        	<center><a href="expressoes"><button>Ver Word Cloud de expressoes frequentes</button></a></center>
-        	<br><br>
+        <div th:unless="${!existemBlogs}">
+        	<center>
+        	<img src="/img/WordCloud.png?v1" width=200 height=200>
+        	</center><br>
         </div>
         <div th:replace="/fragmentos/adicionar.html"></div>
         <div th:if="${existemBlogs}">

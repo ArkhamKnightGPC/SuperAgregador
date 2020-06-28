@@ -97,6 +97,7 @@ public class ControllerApplication {
 
 		try {
 			usuario = getUsuarioDaSessao(cookies, response);
+			
 			if(cookies != null){
 				conteudoDosCookies = mc.lerCookies(cookies);
 				for (Integer i : conteudoDosCookies.keySet()) {
@@ -109,7 +110,25 @@ public class ControllerApplication {
 			existemBlogs = (usuario.getListaDeBlogs().isEmpty()) ? false : true;
 			model.addAttribute("noticias", gerarNoticias(usuario));
 			model.addAttribute("blogs", usuario.getListaDeBlogs());
-
+			
+			//--------------vamos pegar o necessario para exibir a word cloud tambem
+			String textoWordCloud = "";
+			List<String> padroesWordCloud = new ArrayList<>();
+			List<Noticia> noticias = gerarNoticias(usuario);
+			for(int i=0; i<noticias.size(); i++) {
+				textoWordCloud = textoWordCloud + noticias.get(i).getTitulo();
+				textoWordCloud = textoWordCloud + noticias.get(i).getSubtitulo();
+			}
+			
+			String[] palavrasDoTexto = textoWordCloud.split(" ");
+			for(int i=0; i<palavrasDoTexto.length; i++)
+				padroesWordCloud.add(palavrasDoTexto[i]);
+			AhoCorasick ahoCorasick = new AhoCorasick(textoWordCloud, padroesWordCloud);
+			List<String> palavrasMaisFrequentes = ahoCorasick.padroesMaisFrequentes();
+			GeradorWordCloud geradorWordCloud = new GeradorWordCloud(palavrasMaisFrequentes, usuario.getUid());
+			geradorWordCloud.gerarWordCloud();
+			//----------------------------------------
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -119,7 +138,7 @@ public class ControllerApplication {
 		model.addAttribute("valorURI", uriPadrao);
 		return "index";
 	}
-
+	
 	@GetMapping("/sobre")
 	public String sobre(Model model) {
 		return "sobre";
@@ -172,30 +191,4 @@ public class ControllerApplication {
 		return "redirect:/";
 	}
 	
-	@RequestMapping("/expressoes")
-	public String expressoes(Model model, HttpServletResponse response, HttpServletRequest request) throws Exception{
-		//preciso pegar textos das noticias para pesquisar as expressoes
-		String texto = "";
-		List<String> padroes = new ArrayList<>();
-		Cookie[] cookies = request.getCookies();
-		Usuario usuario = getUsuarioDaSessao(cookies, response);
-	
-		List<Noticia> noticias = gerarNoticias(usuario);
-		for(int i=0; i<noticias.size(); i++) {
-			texto = texto + noticias.get(i).getTitulo();
-			texto = texto + noticias.get(i).getSubtitulo();
-		}
-		String[] palavrasDoTexto = texto.split(" ");
-		for(int i=0; i<palavrasDoTexto.length; i++)
-			padroes.add(palavrasDoTexto[i]);
-		
-		AhoCorasick ahoCorasick = new AhoCorasick(texto, padroes);
-		List<String> palavrasMaisFrequentes = ahoCorasick.padroesMaisFrequentes();
-		
-		//vamos usar essas palavras para gerar word cloud
-		GeradorWordCloud geradorWordCloud = new GeradorWordCloud(palavrasMaisFrequentes);
-		geradorWordCloud.gerarWordCloud();
-		
-		return "expressoes";
-	}
 }
