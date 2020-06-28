@@ -17,8 +17,9 @@ import com.kennycason.kumo.nlp.filter.Filter;
 import com.kennycason.kumo.palette.ColorPalette;
 
 public class GeradorWordCloud {
-	List<String> palavras = new ArrayList<>();
-	int idUsuario;
+	private List<String> palavras = new ArrayList<>();
+	private int idUsuario;
+	public String linkImagem;
 	
 	public GeradorWordCloud(List<String> palavras, int idUsuario) throws Exception {
 		this.palavras = palavras;
@@ -43,7 +44,8 @@ public class GeradorWordCloud {
 		wordCloud.setColorPalette(new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
 		wordCloud.setFontScalar(new SqrtFontScalar(10, 40));
 		wordCloud.build(wordFrequencies);
-		wordCloud.writeToFile("src/main/resources/static/img/WordCloud" + idUsuario +".png");
+		linkImagem = "/img/WordCloud-" + idUsuario + ".png";
+		wordCloud.writeToFile("src/main/resources/static/img/WordCloud-" + idUsuario + ".png");
 	}
 }
 

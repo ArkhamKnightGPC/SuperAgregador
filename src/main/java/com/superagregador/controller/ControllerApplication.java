@@ -127,6 +127,7 @@ public class ControllerApplication {
 			List<String> palavrasMaisFrequentes = ahoCorasick.padroesMaisFrequentes();
 			GeradorWordCloud geradorWordCloud = new GeradorWordCloud(palavrasMaisFrequentes, usuario.getUid());
 			geradorWordCloud.gerarWordCloud();
+			model.addAttribute("localWordCloud", geradorWordCloud.linkImagem);
 			//----------------------------------------
 			
 		} catch (Exception e) {
